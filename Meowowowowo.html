@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>МЯВМЯВМЯВ</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            text-align: center;
+        }
+        
+        .rainbow-button {
+            padding: 15px 30px;
+            font-size: 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            z-index: 1;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-weight: bold;
+        }
+        
+        .rainbow-button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 300%;
+            height: 100%;
+            background: linear-gradient(
+                115deg,
+                #ff0000, #ff9900, #33cc33,
+                #3399ff, #9933ff, #ff0066,
+                #ff0000, #ff9900, #33cc33
+            );
+            background-size: 50% 100%;
+            animation: rainbow-move 3s linear infinite;
+            z-index: -1;
+        }
+        
+        .rainbow-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        @keyframes rainbow-move {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-33.33%);
+            }
+        }
+        
+        .success-message {
+            display: none;
+            margin-top: 30px;
+            padding: 30px;
+            background-color: #e8f5e9;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h1 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        p {
+            font-size: 18px;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .salary {
+            font-weight: bold;
+            color: #1976d2;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="rainbow-button">Нажми на меня</button>
+        
+        <div class="success-message">
+            <h1>Поздравляем!</h1>
+            <p>Вы успешно приняты на работу "<span class="job-title">Не матюкаюсь</span>"</p>
+            <p>Ваша зарплата составит <span class="salary">3 евро в день</span></p>
+            <p>Добро пожаловать в нашу команду!</p>
+            <p class="signature">Настюня</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const button = document.querySelector('.rainbow-button');
+            const successMessage = document.querySelector('.success-message');
+            
+            button.addEventListener('click', function() {
+                successMessage.style.display = 'block';
+                button.style.display = 'none';
+                createConfetti();
+            });
+            
+            function createConfetti() {
+                const colors = ['#ff0000', '#ff9900', '#33cc33', '#3399ff', '#9933ff', '#ff0066'];
+                const containerRect = document.querySelector('.container').getBoundingClientRect();
+                
+                for (let i = 0; i < 100; i++) {
+                    setTimeout(() => {
+                        const confetti = document.createElement('div');
+                        confetti.className = 'confetti';
+                        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                        confetti.style.left = Math.random() * containerRect.width + 'px';
+                        confetti.style.top = -10 + 'px';
+                        document.querySelector('.container').appendChild(confetti);
+                        
+                        const animationDuration = Math.random() * 3 + 2;
+                        const xMovement = (Math.random() - 0.5) * 200;
+                        
+                        confetti.animate([
+                            { transform: 'translate(0, 0) rotate(0deg)', opacity: 1 },
+                            { transform: `translate(${xMovement}px, ${window.innerHeight}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+                        ], {
+                            duration: animationDuration * 1000,
+                            easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)'
+                        });
+                        
+                        setTimeout(() => {
+                            confetti.remove();
+                        }, animationDuration * 1000);
+                    }, i * 40);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
